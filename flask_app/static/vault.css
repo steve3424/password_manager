@@ -1,0 +1,124 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: blue;
+    height: 100vh;
+}
+
+.main-layout {
+    background-color: white;
+    margin: 0 auto;
+    /* padding: 50px; */
+
+    height: 100%;
+    width: 80%;
+}
+
+.header {
+    align-items: center;
+    background-color: #333;
+    display: flex;
+    justify-content: space-between;
+    padding: 30px 25px;
+}
+
+.header__title {
+    color: white;
+    font-family: sans-serif;
+    font-size: 2em;
+}
+
+.header__user {
+    color: white;
+    font-family: sans-serif;
+}
+
+.new-entry {
+    background-color: white;
+    padding: 5px 0;
+}
+
+.new-entry__toggle {
+    background-color: #333;
+    border: 2px solid gray;
+    border-radius: 100px;
+    color: white;
+    display: block;
+    font-family: sans-serif;
+    font-size: 1.5em;
+    margin: 0 auto;
+    padding: 10px 15px;
+    width: fit-content;
+}
+
+.new-entry__toggle:hover {
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+}
+
+.new-entry__form {
+    padding: 15px;
+}
+
+.new-entry__form--hidden {
+    height: 0;
+    max-height: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.new-entry__label {
+    margin-bottom: 5px;
+}
+
+.new-entry__input {
+    border: none;
+    border-bottom: 1px solid gray;
+    margin-bottom: 15px;
+    padding: 7px;
+    width: 100%;
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: inherit;
+}
+
+.vault-entry__form {
+    max-height: 0;
+    overflow: hidden;
+    /* transition: max-height 1s ease-in-out; */
+}
+
+.vault-entry__title {
+    background-color: gray;
+    font-family: sans-serif;
+    font-size: 1.3em;
+    padding: 10px 15px;
+    width: 100%;
+}
+
+.vault-entry__title:hover {
+    cursor: pointer;
+}
+
+.vault-entry:nth-of-type(even) .vault-entry__title {
+    background-color: white;
+}
+
+.vault-entry__form {
+    background-color: red;
+    width: 100%;
+}
+
+#spacer {
+    background-color: white;
+    height: 50px;
+    width: 100%;
+}

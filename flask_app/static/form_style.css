@@ -1,0 +1,43 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+/* input:focus::placeholder {
+	color: transparent;
+} */
+
+.form-card {
+	background-color: #333;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	padding: 20px 30px;
+	text-align: center;
+}
+
+.form-card__title {
+	color: royalblue;
+	font-family: sans-serif;
+	margin: 20px 0;
+}
+
+.form-card__label {
+	color: white;
+	display: inline-block;
+	font-family: sans-serif;
+	font-size: 1.3em;
+	margin-bottom: 10px;
+}
+
+.form-card__input {
+	border-radius: 5px;
+	color: black;
+	display: block;
+	font-family: sans-serif;
+	font-size: 1.2em;
+	margin-bottom: 20px;
+	padding: 5px 7px;
+	text-align: center;
+	width: 100%;
+}

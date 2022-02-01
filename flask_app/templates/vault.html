@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='vault.css')}}">
+</head>
+<body>
+    <div class="main-layout">
+        <div class="header">
+            <h1 class="header__title">Password Manager</h1>
+            <p class="header__user">Username here</p>
+            <a href="/user/logout">logout</a>
+        </div>
+
+        <div class="new-entry">
+            <p class="new-entry__toggle" onclick="ToggleNewEntryForm()">Add Entry +</p>
+            <form class="new-entry__form new-entry__form--hidden" action="/user/vault/add_entry" onsubmit="SavePassword(); return false;">
+                <p class="new-entry__label">Name</p>
+                <input class="new-entry__input" type="text">
+                <p class="new-entry__label">Login</p>
+                <input class="new-entry__input" type="text">
+                <p class="new-entry__label">Password</p>
+                <input class="new-entry__input" type="password">
+                <p class="new-entry__label">Website</p>
+                <input class="new-entry__input" type="text">
+                
+                <input class="new-entry__toggle" type="submit" value="Save Entry">
+            </form>
+        </div>
+
+        <div id="vault-entries">
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <div class="vault-entry__form">
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                    <p>hey</p>
+                </div>
+            </div>
+
+            <div id="spacer"></div>
+        </div>
+    </div>
+</body>
+<script src="{{url_for('static', filename='vault.js')}}"></script>
+</html>
