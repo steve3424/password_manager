@@ -18,13 +18,13 @@
             <p class="new-entry__toggle" onclick="ToggleNewEntryForm()">Add Entry +</p>
             <form class="new-entry__form new-entry__form--hidden" action="/vault/add_entry" name="new_entry_form" onsubmit="SavePassword(); return false;">
                 <p class="new-entry__label">Name</p>
-                <input class="new-entry__input" type="text">
+                <input class="new-entry__input" name="name" type="text">
                 <p class="new-entry__label">Login</p>
-                <input class="new-entry__input" type="text">
+                <input class="new-entry__input" name="login" type="text">
                 <p class="new-entry__label">Password</p>
-                <input class="new-entry__input" type="password">
+                <input class="new-entry__input" name="password" type="password">
                 <p class="new-entry__label">Website</p>
-                <input class="new-entry__input" type="text">
+                <input class="new-entry__input" name="website" type="text">
                 
                 <input class="new-entry__toggle" type="submit" value="Save Entry">
             </form>
