@@ -34,7 +34,8 @@ async function GenerateEncryptionKeyAndAuthCode(form) {
 	var	password_bytes = encoder.encode(form["password"].value);
 	var encryption_key = await GenerateKey(password_bytes, email_bytes, 100100);
 	// STORE AES KEY FOR LATER USE WITH VAULT
-	window.sessionStorage.setItem("AES_KEY", encryption_key);
+	var jwk_string = JSON.stringify(await crypto.subtle.exportKey('jwk', encryption_key));
+	window.sessionStorage.setItem("AES_KEY", jwk_string);
 
 	var encryption_key_bytes = await crypto.subtle.exportKey("raw", encryption_key);
 	var auth_code = await GenerateKey(encryption_key_bytes, password_bytes, 1);

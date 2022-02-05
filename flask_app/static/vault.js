@@ -42,3 +42,31 @@ function ToggleNewEntryForm() {
         Stick();
     }
 }
+
+function GetKeyFromSession() {
+    var encryption_key_jwk = JSON.parse(sessionStorage.getItem("AES_KEY"));
+    return crypto.subtle.importKey(
+        "jwk",
+        encryption_key_jwk,
+        "AES-GCM",
+        true,
+        ["encrypt", "decrypt"]
+    );
+}
+
+async function SavePassword() {
+    var new_entry_form = document.forms["new_entry_form"];
+    // TODO: validate form
+
+    // var iv = window.crypto.getRandomValues(new Uint8Array(16));
+    // var new_entry = {
+    //     name:     new_entry_form["name"].value,
+    //     login:    new_entry_form["login"].value,
+    //     password: new_entry_form["password"].value,
+    //     website:  new_entry_form["website"].value
+    // };
+    // var encoder = new TextEncoder();
+    // var new_entry_bytes = encoder.encode(JSON.stringify(new_entry));
+    var encryption_key = await GetKeyFromSession();
+    console.log(encryption_key);
+}
