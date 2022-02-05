@@ -40,7 +40,7 @@ async function GenerateEncryptionKeyAndAuthCode(form) {
 	var encryption_key_bytes = await crypto.subtle.exportKey("raw", encryption_key);
 	var auth_code = await GenerateKey(encryption_key_bytes, password_bytes, 1);
 	var auth_code_bytes = await crypto.subtle.exportKey("raw", auth_code);
-	return auth_hex_string = [...new Uint8Array(auth_code_bytes)].map(x => x.toString(16).padStart(2,'0')).join("");
+	return auth_hex_string = BytesToHexString(new Uint8Array(auth_code_bytes));
 }
 
 function LoginTabActivate(clicked_tab) {
