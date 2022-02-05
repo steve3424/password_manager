@@ -27,6 +27,21 @@ async function GenerateKey(key_bytes, salt_bytes, iterations) {
 	);
 }
 
+// Generates both keys and stores them in local storage for later use
+async function GenerateEncryptionKeyAndAuthCode(form) {
+   	var encoder = new TextEncoder();
+	var	email_bytes = encoder.encode(form["email"].value);
+	var	password_bytes = encoder.encode(form["password"].value);
+	var encryption_key = await GenerateKey(password_bytes, email_bytes, 100100);
+	// STORE AES KEY FOR LATER USE WITH VAULT
+	window.sessionStorage.setItem("AES_KEY", encryption_key);
+
+	var encryption_key_bytes = await crypto.subtle.exportKey("raw", encryption_key);
+	var auth_code = await GenerateKey(encryption_key_bytes, password_bytes, 1);
+	var auth_code_bytes = await crypto.subtle.exportKey("raw", auth_code);
+	return auth_hex_string = [...new Uint8Array(auth_code_bytes)].map(x => x.toString(16).padStart(2,'0')).join("");
+}
+
 function LoginTabActivate(clicked_tab) {
     var active_tab = document.querySelector(".login__tab--active");
     active_tab.classList.remove("login__tab--active");
@@ -40,18 +55,6 @@ function LoginTabActivate(clicked_tab) {
         document.querySelector("#login_form").style.display = "none";
         document.querySelector("#register_form").style.display = "block";
     }
-}
-
-// Generates both keys and stores them in local storage for later use
-async function GenerateEncryptionKeyAndAuthCode(form) {
-   	var encoder = new TextEncoder();
-	var	email_bytes = encoder.encode(form["email"].value);
-	var	password_bytes = encoder.encode(form["password"].value);
-	var encryption_key = await GenerateKey(password_bytes, email_bytes, 100100);
-	var encryption_key_bytes = await crypto.subtle.exportKey("raw", encryption_key);
-	var auth_code = await GenerateKey(encryption_key_bytes, password_bytes, 1);
-	var auth_code_bytes = await crypto.subtle.exportKey("raw", auth_code);
-	return auth_hex_string = [...new Uint8Array(auth_code_bytes)].map(x => x.toString(16).padStart(2,'0')).join("");
 }
 
 async function ValidateRegistrationForm() {
@@ -90,7 +93,6 @@ async function ValidateRegistrationForm() {
 	if(is_valid) {
 		// Clear password fields and stick auth code in as hex string
 		document.querySelector("#auth_code_registration").value = await GenerateEncryptionKeyAndAuthCode(register_form);
-		console.log(document.querySelector("#auth_code_registration").value);
 		register_form["password"].value = "";
 		register_form["confirm_password"].value = "";
 		register_form.submit();
@@ -123,7 +125,6 @@ async function ValidateLoginForm() {
 	if(is_valid) {
 		// Clear password fields and stick auth code in as hex string
 		document.querySelector("#auth_code_login").value = await GenerateEncryptionKeyAndAuthCode(login_form)
-		console.log(document.querySelector("#auth_code_login").value);
 		login_form["password"].value = "";
 
 		login_form.submit();
