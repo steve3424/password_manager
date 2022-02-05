@@ -19,7 +19,7 @@
 			</p>
 		</div>
 
-		<form class="form-card" id="login_form" name="login_form" onsubmit="ValidateLoginForm(); return false;" action="/user/login" method="post">
+		<form class="form-card" id="login_form" name="login_form" onsubmit="ValidateLoginForm(); return false;" action="/login" method="post">
 			<input type="hidden" id="auth_code_login" name="auth_code">
 
 			<!-- JAVASCRIPT VALIDATION ERROR MESSAGE -->
@@ -51,7 +51,7 @@
 			<input class="button" type="submit" value="Login">
 		</form>
 
-		<form class="form-card hidden" id="register_form" name="register_form" onsubmit="ValidateRegistrationForm(); return false;" action="/user/register" method="post">
+		<form class="form-card hidden" id="register_form" name="register_form" onsubmit="ValidateRegistrationForm(); return false;" action="/register" method="post">
 
 			<input type="hidden" id="auth_code_registration" name="auth_code">
 

@@ -6,7 +6,7 @@ from flask_app.models.user_cls import User
 # TODO: Implement refresh tokens ??https://www.rfc-editor.org/rfc/rfc6749#section-10.4 
 #https://stackoverflow.com/questions/48235441/flask-use-session-value-can-be-copied-to-another-computer-and-used-is-this-ok 
 
-@app.route("/user/register", methods=["POST"])
+@app.route("/register", methods=["POST"])
 def UserRegister():
     if not User.ValidateRegistrationForm(request.form):
         return redirect("/")
@@ -21,9 +21,9 @@ def UserRegister():
         user_id = User.Add(data)
         session["user_id"] = user_id
         session["user_email"] = request.form["email"]
-        return redirect(f"/user/vault")
+        return redirect(f"/vault")
 
-@app.route("/user/login", methods=["POST"])
+@app.route("/login", methods=["POST"])
 def UserLogin():
     user_id = User.Login(request.form)
     if user_id < 0:
@@ -31,4 +31,4 @@ def UserLogin():
     else:
         session["user_id"] = user_id
         session["user_email"] = request.form["email"]
-        return redirect(f"/user/vault")
+        return redirect(f"/vault")
