@@ -55,55 +55,122 @@ function GetKeyFromSession() {
     );
 }
 
-async function SavePassword() {
+function ValidateNewEntryForm() {
     var new_entry_form = document.forms["new_entry_form"];
-    // TODO: validate form
+    var is_valid = true;
 
-    // Turn new entry form into Javascript object
-    var new_entry = {
-        name:     new_entry_form["name"].value,
-        login:    new_entry_form["login"].value,
-        password: new_entry_form["password"].value,
-        website:  new_entry_form["website"].value
-    };
-    var encoder = new TextEncoder();
-    // TODO: what is the max length here ??
-    var new_entry_json_string = JSON.stringify(new_entry);
-    var new_entry_bytes = encoder.encode(new_entry_json_string);
+	// Get rid of all error messages to start, 
+	// the checks below will re-display if necessary
+	var name_too_short_error = document.querySelector("#name_too_short_error");
+	var name_too_long_error = document.querySelector("#name_too_long_error");
+	var login_too_short_error = document.querySelector("#login_too_short_error");
+	var login_too_long_error = document.querySelector("#login_too_long_error");
+	var password_too_short_error = document.querySelector("#password_too_short_error");
+	var password_too_long_error = document.querySelector("#password_too_long_error");
+	var website_too_short_error = document.querySelector("#website_too_short_error");
+	var website_too_long_error = document.querySelector("#website_too_long_error");
+	name_too_short_error.style.display = "none";
+	name_too_long_error.style.display = "none";
+	login_too_short_error.style.display = "none";
+	login_too_long_error.style.display = "none";
+	password_too_short_error.style.display = "none";
+	password_too_long_error.style.display = "none";
+	website_too_short_error.style.display = "none";
+	website_too_long_error.style.display = "none";
 
-    var encryption_key = await GetKeyFromSession();
-    // Bytes for IV
-    var iv = window.crypto.getRandomValues(new Uint8Array(12));
-    var new_entry_encrypted = await crypto.subtle.encrypt(
-        {
-            name: "AES-GCM",
-            iv: iv 
-        },
-        encryption_key,
-        new_entry_bytes
-    );
-    var new_entry_encrypted_bytes = new Uint8Array(new_entry_encrypted);
+    var name = new_entry_form["name"].value;
+    if(name.length === 0) {
+        name_too_short_error.style.display = "block";
+        is_valid = false;
+    }
+    else if(name.length > 64) {
+        name_too_long_error.style.display = "block";
+        is_valid = false;
+    }
 
-    var test_string = BytesToHexString(new_entry_encrypted_bytes);
-    var test_bytes = HexStringToBytes(test_string);
-    // var new_iv = window.crypto.getRandomValues(new Uint8Array(12));
-    var decrypted = await crypto.subtle.decrypt(
-        {
-            name: "AES-GCM",
-            iv: iv
-        },
-        encryption_key,
-        test_bytes
-    );
-    var decrypted_uint8 = new Uint8Array(decrypted);
-    var decoder = new TextDecoder();
-    var json_string = decoder.decode(decrypted_uint8);
-    console.log("DECRYPTED" + json_string);
+    var login = new_entry_form["login"].value;
+    if(login.length === 0) {
+        login_too_short_error.style.display = "block";
+        is_valid = false;
+    }
+    else if(login.length > 64) {
+        login_too_long_error.style.display = "block";
+        is_valid = false;
+    }
 
+    var password = new_entry_form["password"].value;
+    if(password.length === 0) {
+        password_too_short_error.style.display = "block";
+        is_valid = false;
+    }
+    else if(password.length > 64) {
+        password_too_long_error.style.display = "block";
+        is_valid = false;
+    }
 
-    // Hex string to store in database
-    // var iv_hex = BytesToHexString(iv);
-    // var new_entry = {
-    //     name:     "namesaaaa"
-    // };
+    var website = new_entry_form["website"].value;
+    if(website.length === 0) {
+        website_too_short_error.style.display = "block";
+        is_valid = false;
+    }
+    else if(website.length > 64) {
+        website_too_long_error.style.display = "block";
+        is_valid = false;
+    }
+
+    return is_valid;
+}
+
+async function SavePassword() {
+    var is_valid = ValidateNewEntryForm();
+
+    if(is_valid) {
+        // Turn new entry form into Javascript object
+        var new_entry = {
+            name:     new_entry_form["name"].value,
+            login:    new_entry_form["login"].value,
+            password: new_entry_form["password"].value,
+            website:  new_entry_form["website"].value
+        };
+        var encoder = new TextEncoder();
+        // TODO: what is the max length here ??
+        var new_entry_json_string = JSON.stringify(new_entry);
+        var new_entry_bytes = encoder.encode(new_entry_json_string);
+    
+        var encryption_key = await GetKeyFromSession();
+        // Bytes for IV
+        var iv = window.crypto.getRandomValues(new Uint8Array(12));
+        var new_entry_encrypted = await crypto.subtle.encrypt(
+            {
+                name: "AES-GCM",
+                iv: iv 
+            },
+            encryption_key,
+            new_entry_bytes
+        );
+        var new_entry_encrypted_bytes = new Uint8Array(new_entry_encrypted);
+    
+        var test_string = BytesToHexString(new_entry_encrypted_bytes);
+        var test_bytes = HexStringToBytes(test_string);
+        // var new_iv = window.crypto.getRandomValues(new Uint8Array(12));
+        var decrypted = await crypto.subtle.decrypt(
+            {
+                name: "AES-GCM",
+                iv: iv
+            },
+            encryption_key,
+            test_bytes
+        );
+        var decrypted_uint8 = new Uint8Array(decrypted);
+        var decoder = new TextDecoder();
+        var json_string = decoder.decode(decrypted_uint8);
+        console.log("DECRYPTED" + json_string);
+    
+    
+        // Hex string to store in database
+        // var iv_hex = BytesToHexString(iv);
+        // var new_entry = {
+        //     name:     "namesaaaa"
+        // };
+    }
 }
