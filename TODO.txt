@@ -1,0 +1,5 @@
+- BUG: with a single entry (open or closed), scroll bar jumps to top once I scroll down enough to hit the sticky add entry section
+- Add backend validations to new entry form
+- Make sure the lengths I'm enforcing are correct for all forms
+- Actually save new entries with iv's
+- If flask validation is hit on registration, make sure that tab is selected on redirect
