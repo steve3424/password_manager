@@ -3,3 +3,4 @@
 - Make sure the lengths I'm enforcing are correct for all forms
 - Actually save new entries with iv's
 - If flask validation is hit on registration, make sure that tab is selected on redirect
+- Maybe I can make error messages more dynamic instead of having so much HTML. I could have the HTML for the flash messages, but dynamically create the JS ones?
