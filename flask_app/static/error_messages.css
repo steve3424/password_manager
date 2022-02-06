@@ -1,0 +1,9 @@
+.error-string {
+    color: red;
+    font-family: sans-serif;
+    font-size: 0.9em;
+}
+
+.hidden {
+    display: none;
+}

@@ -5,6 +5,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="{{url_for('static', filename='index.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='error_messages.css')}}">
 	<link rel="stylesheet" href="{{url_for('static', filename='form_style.css')}}">
 	<link rel="stylesheet" href="{{url_for('static', filename='button.css')}}">
 </head>
@@ -23,13 +24,13 @@
 			<input type="hidden" id="auth_code_login" name="auth_code">
 
 			<!-- JAVASCRIPT VALIDATION ERROR MESSAGE -->
-			<p class="login__error-string" id="email_length_error">* Please enter an email address</p>
+			<p class="error-string hidden" id="email_length_error">* Please enter an email address</p>
 
 			<!-- FLASH VALIDATION ERROR MESSAGE -->
 			{% with messages = get_flashed_messages(category_filter=['flash_user_not_found']) %}
 				{% if messages %}
 					{% for message in messages %}
-						<p class="login__error-string login__error-string--active">{{ message }}</p>
+						<p class="error-string">{{ message }}</p>
 					{% endfor %}
 				{% endif %}
 			{% endwith %}
@@ -37,13 +38,13 @@
 			<input class="form-card__input" id="test" type="text" name="email" placeholder="Email Address">
 
 			<!-- JAVASCRIPT VALIDATION ERROR MESSAGE -->
-			<p class="login__error-string" id="login_password_length_error">* Please enter a password</p>
+			<p class="error-string hidden" id="login_password_length_error">* Please enter a password</p>
 
 			<!-- FLASH VALIDATION ERROR MESSAGE -->
 			{% with messages = get_flashed_messages(category_filter=['flash_password_incorrect']) %}
 				{% if messages %}
 					{% for message in messages %}
-						<p class="login__error-string login__error-string--active">{{ message }}</p>
+						<p class="error-string">{{ message }}</p>
 					{% endfor %}
 				{% endif %}
 			{% endwith %}
@@ -56,13 +57,13 @@
 			<input type="hidden" id="auth_code_registration" name="auth_code">
 
 			<!-- JAVASCRIPT VALIDATION ERROR MESSAGE -->
-			<p class="login__error-string" id="reg_email_error">* Email address is invalid</p>
+			<p class="error-string hidden" id="reg_email_error">* Email address is invalid</p>
 
 			<!-- FLASH VALIDATION ERROR MESSAGE -->
 			{% with messages = get_flashed_messages(category_filter=['flash_email_too_long']) %}
 				{% if messages %}
 					{% for message in messages %}
-						<p class="login__error-string login__error-string--active">{{ message }}</p>
+						<p class="error-string">{{ message }}</p>
 					{% endfor %}
 				{% endif %}
 			{% endwith %}
@@ -71,7 +72,7 @@
 			{% with messages = get_flashed_messages(category_filter=['flash_email_invalid']) %}
 				{% if messages %}
 					{% for message in messages %}
-						<p class="login__error-string login__error-string--active">{{ message }}</p>
+						<p class="error-string">{{ message }}</p>
 					{% endfor %}
 				{% endif %}
 			{% endwith %}
@@ -80,7 +81,7 @@
 			{% with messages = get_flashed_messages(category_filter=['flash_email_exists']) %}
 				{% if messages %}
 					{% for message in messages %}
-						<p class="login__error-string login__error-string--active">{{ message }}</p>
+						<p class="error-string">{{ message }}</p>
 					{% endfor %}
 				{% endif %}
 			{% endwith %}
@@ -88,13 +89,13 @@
 			<input class="form-card__input" type="text" name="email" placeholder="Email Address">
 
 			<!-- JAVASCRIPT VALIDATION ERROR MESSAGE -->
-			<p class="login__error-string" id="reg_password_length_error">* Password must be between 8 and 32 characters</p>
+			<p class="error-string hidden" id="reg_password_length_error">* Password must be between 8 and 32 characters</p>
 
 			<!-- FLASH VALIDATION ERROR MESSAGE -->
 			{% with messages = get_flashed_messages(category_filter=['flash_password_empty']) %}
 				{% if messages %}
 					{% for message in messages %}
-						<p class="login__error-string login__error-string--active">{{ message }}</p>
+						<p class="error-string">{{ message }}</p>
 					{% endfor %}
 				{% endif %}
 			{% endwith %}
@@ -102,7 +103,7 @@
 			<input class="form-card__input" type="password" name="password" placeholder="Password">
 
 			<!-- JAVASCRIPT VALIDATION ERROR MESSAGE -->
-			<p class="login__error-string" id="reg_password_match_error">* Passwords must match</p>
+			<p class="error-string hidden" id="reg_password_match_error">* Passwords must match</p>
 			<input class="form-card__input" type="password" name="confirm_password" placeholder="Confirm Password">
 
 			<input class="button" type="submit" value="Register">
