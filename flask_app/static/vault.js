@@ -59,16 +59,51 @@ async function SavePassword() {
     var new_entry_form = document.forms["new_entry_form"];
     // TODO: validate form
 
-    var iv = window.crypto.getRandomValues(new Uint8Array(16));
-    var iv_hex = BytesToHexString(iv);
+    // Turn new entry form into Javascript object
+    var new_entry = {
+        name:     new_entry_form["name"].value,
+        login:    new_entry_form["login"].value,
+        password: new_entry_form["password"].value,
+        website:  new_entry_form["website"].value
+    };
+    var encoder = new TextEncoder();
+    // TODO: what is the max length here ??
+    var new_entry_json_string = JSON.stringify(new_entry);
+    var new_entry_bytes = encoder.encode(new_entry_json_string);
+
+    var encryption_key = await GetKeyFromSession();
+    // Bytes for IV
+    var iv = window.crypto.getRandomValues(new Uint8Array(12));
+    var new_entry_encrypted = await crypto.subtle.encrypt(
+        {
+            name: "AES-GCM",
+            iv: iv 
+        },
+        encryption_key,
+        new_entry_bytes
+    );
+    var new_entry_encrypted_bytes = new Uint8Array(new_entry_encrypted);
+
+    var test_string = BytesToHexString(new_entry_encrypted_bytes);
+    var test_bytes = HexStringToBytes(test_string);
+    // var new_iv = window.crypto.getRandomValues(new Uint8Array(12));
+    var decrypted = await crypto.subtle.decrypt(
+        {
+            name: "AES-GCM",
+            iv: iv
+        },
+        encryption_key,
+        test_bytes
+    );
+    var decrypted_uint8 = new Uint8Array(decrypted);
+    var decoder = new TextDecoder();
+    var json_string = decoder.decode(decrypted_uint8);
+    console.log("DECRYPTED" + json_string);
+
+
+    // Hex string to store in database
+    // var iv_hex = BytesToHexString(iv);
     // var new_entry = {
-    //     name:     new_entry_form["name"].value,
-    //     login:    new_entry_form["login"].value,
-    //     password: new_entry_form["password"].value,
-    //     website:  new_entry_form["website"].value
+    //     name:     "namesaaaa"
     // };
-    // var encoder = new TextEncoder();
-    // var new_entry_bytes = encoder.encode(JSON.stringify(new_entry));
-    // var encryption_key = await GetKeyFromSession();
-    // console.log(encryption_key);
 }
