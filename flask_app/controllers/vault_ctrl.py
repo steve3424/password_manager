@@ -14,14 +14,3 @@ def UserVault():
 def UserLogout():
     session.clear()
     return redirect("/")
-
-@app.route("/test")
-def Test():
-    if "user_id" in session:
-        # query = "SELECT * FROM vault WHERE user_id=%(user_id)s;"
-        # data = {
-        #     "user_id" : session["user_id"]
-        # }
-        # results = connectToMySQL("password_manager_db").query_db(query,data)
-
-        return json.dumps([{"one" : "one"}, {"two" : "two"}])

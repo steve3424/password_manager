@@ -166,7 +166,6 @@ async function SavePassword() {
         var json_string = decoder.decode(decrypted_uint8);
         console.log("DECRYPTED" + json_string);
     
-    
         // Hex string to store in database
         // var iv_hex = BytesToHexString(iv);
         // var new_entry = {
