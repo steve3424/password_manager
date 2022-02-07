@@ -17,7 +17,10 @@
 
         <div class="new-entry">
             <p class="new-entry__toggle" onclick="ToggleNewEntryForm()">Add Entry +</p>
-            <form class="new-entry__form new-entry__form--hidden" action="/vault/add_entry" name="new_entry_form" onsubmit="SavePassword(); return false;">
+            <form class="new-entry__form new-entry__form--hidden" action="/vault/add_entry" method="post" name="new_entry_form" onsubmit="SavePassword(); return false;">
+                <input type="hidden" name="encrypted_entry_hex">
+                <input type="hidden" name="iv_hex">
+
                 <p class="new-entry__label">Name</p>
                 <!-- JAVASCRIPT VALIDATION ERROR MESSAGES -->
                 <p class="error-string hidden" id="name_too_short_error">* Please enter a name</p>
