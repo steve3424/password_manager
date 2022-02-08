@@ -165,8 +165,46 @@ async function SavePassword() {
 }
 
 async function GetUsersVault() {
+    // TODO: Get Key will eventually be done once on load
+    var decryption_key = await GetKeyFromSession();
+
     var vault = await fetch("http://localhost:5000/get_user_vault");
-    console.log(await vault.json());
+    var vault_json = await vault.json();
+
+    var decoder = new TextDecoder();
+    var entries = vault_json["vault"];
+    var vault_entries_dom = document.querySelector("#vault-entries");
+    // TODO: These should probably be put into an array
+    //       so they can be manipulated in memory
+    for(var i = 0; i < entries.length; ++i) {
+        var entry_bytes = HexStringToBytes(entries[i]["entry"]);
+        var iv_bytes    = HexStringToBytes(entries[i]["iv"]);
+        var entry_decrypted = await crypto.subtle.decrypt(
+            {
+                name: "AES-GCM",
+                iv: iv_bytes 
+            },
+            decryption_key,
+            entry_bytes
+        );
+        var entry_json_string = decoder.decode(entry_decrypted);
+        var entry_json = JSON.parse(entry_json_string);
+
+        // Create html for entry
+        var vault_entry_div = document.createElement("div");
+        vault_entry_div.classList.add("vault-entry");
+        var vault_entry_title = document.createElement("h2");
+        vault_entry_title.classList.add("vault-entry__title");
+        vault_entry_title.innerHTML = entry_json["name"];
+
+        // Append everything here
+        vault_entry_div.appendChild(vault_entry_title);
+        vault_entries_dom.appendChild(vault_entry_div);
+    }
+
+    var spacer_div = document.createElement("div");
+    spacer_div.setAttribute("id", "spacer");
+    vault_entries_dom.appendChild(spacer_div);
 }
 
 GetUsersVault();
