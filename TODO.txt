@@ -1,9 +1,12 @@
-- NEXT: Retrieve and decrypt a user's vault
+- NEXT: Properly display users vault
 
 - BUG: with a single entry (open or closed), scroll bar jumps to top once I scroll down enough to hit the sticky add entry section
+
 - Add backend validations to new entry form
 - Make sure the lengths I'm enforcing are correct for all forms
 - If flask validation is hit on registration, make sure that tab is selected on redirect
 - Maybe I can make error messages more dynamic instead of having so much HTML. I could have the HTML for the flash messages, but dynamically create the JS ones?
 - Complete DB set up script
 - Should I use html forms at all since I am clearing them out or just send json?
+    -- I would have to do all of the redirection in Javascript
+- How to do loading screen on vault page for large vaults
