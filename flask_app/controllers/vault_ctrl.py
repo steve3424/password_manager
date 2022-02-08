@@ -23,6 +23,17 @@ def VaultAddEntry():
     else:
         return redirect("/")
 
+@app.route("/get_user_vault")
+def GetUserVault():
+    if "user_id" in session:
+        data = {
+            "user_id" : session["user_id"]
+        }
+        vault_entries = VaultEntry.GetUserVault(data)
+        return {"vault" : vault_entries}, 200
+    else:
+        return {"error" : "no session found"}, 401
+
 @app.route("/logout")
 def UserLogout():
     session.clear()

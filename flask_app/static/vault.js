@@ -163,3 +163,10 @@ async function SavePassword() {
         new_entry_form.submit();
     }
 }
+
+async function GetUsersVault() {
+    var vault = await fetch("http://localhost:5000/get_user_vault");
+    console.log(await vault.json());
+}
+
+GetUsersVault();

@@ -10,3 +10,13 @@ class VaultEntry():
         query = ("INSERT INTO vault (entry,iv,user_id,created_at,updated_at) "
                  "VALUES (%(entry)s, %(iv)s, %(user_id)s, NOW(), NOW());")
         connectToMySQL(mysql_config["DB"]).query_db(query,data)
+
+    @classmethod
+    def GetUserVault(cls, data):
+        query = ("SELECT entry,iv FROM vault "
+                 "WHERE user_id=%(user_id)s;")
+        results = connectToMySQL(mysql_config["DB"]).query_db(query, data)
+        # TODO: check for any errors
+        # NOTE: No need to create objects, I want these results
+        #       as dictionaries anyway
+        return results
