@@ -32,11 +32,6 @@ body {
     font-size: 2em;
 }
 
-.header__user {
-    color: white;
-    font-family: sans-serif;
-}
-
 .new-entry {
     background-color: white;
     padding: 5px 0;
@@ -73,6 +68,7 @@ body {
 }
 
 .new-entry__label {
+    font-family: sans-serif;
     margin-bottom: 5px;
 }
 

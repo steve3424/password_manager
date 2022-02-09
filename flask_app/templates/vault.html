@@ -5,14 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{url_for('static', filename='vault.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='button.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='error_messages.css')}}">
 </head>
 <body>
     <div class="main-layout">
         <div class="header">
             <h1 class="header__title">Password Manager</h1>
-            <p class="header__user">Username here</p>
-            <a href="/logout">logout</a>
+            <a href="/logout" class="button">Logout</a>
         </div>
 
         <div class="new-entry">
