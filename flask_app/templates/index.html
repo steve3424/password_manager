@@ -12,15 +12,35 @@
 <body>
 	<div class="login">
 		<div class="login__tabs">
-			<p class="login__tab login__tab--active" id="login_tab" onclick="LoginTabActivate(this)">
-				Login
-			</p>
-			<p class="login__tab" id="register_tab" onclick="LoginTabActivate(this)">
-				Register
-			</p>
+
+			<!-- SET REGISTER TAB TO ACTIVE IF FLASH MESSAGE OCCURED THERE -->
+			{% with messages = get_flashed_messages(category_filter=['register_active']) %}
+				{% if messages %}
+					<p class="login__tab" id="login_tab" onclick="LoginTabActivate(this)">
+						Login
+					</p>
+					<p class="login__tab login__tab--active" id="register_tab" onclick="LoginTabActivate(this)">
+						Register
+					</p>
+				{% else %}
+					<p class="login__tab login__tab--active" id="login_tab" onclick="LoginTabActivate(this)">
+						Login
+					</p>
+					<p class="login__tab" id="register_tab" onclick="LoginTabActivate(this)">
+						Register
+					</p>
+				{% endif %}
+			{% endwith %}
 		</div>
 
+		<!-- SET REGISTER FORM TO ACTIVE IF FLASH MESSAGE OCCURED THERE -->
+		{% with messages = get_flashed_messages(category_filter=['register_active']) %}
+				{% if messages %}
+		<form class="form-card hidden" id="login_form" name="login_form" onsubmit="ValidateLoginForm(); return false;" action="/login" method="post">
+				{% else %}
 		<form class="form-card" id="login_form" name="login_form" onsubmit="ValidateLoginForm(); return false;" action="/login" method="post">
+				{% endif %}
+		{% endwith %}
 			<input type="hidden" id="auth_code_login" name="auth_code">
 
 			<!-- JAVASCRIPT VALIDATION ERROR MESSAGE -->
@@ -52,8 +72,14 @@
 			<input class="button" type="submit" value="Login">
 		</form>
 
+		<!-- SET REGISTER FORM TO ACTIVE IF FLASH MESSAGE OCCURED THERE -->
+		{% with messages = get_flashed_messages(category_filter=['register_active']) %}
+				{% if messages %}
+		<form class="form-card" id="register_form" name="register_form" onsubmit="ValidateRegistrationForm(); return false;" action="/register" method="post">
+				{% else %}
 		<form class="form-card hidden" id="register_form" name="register_form" onsubmit="ValidateRegistrationForm(); return false;" action="/register" method="post">
-
+				{% endif %}
+		{% endwith %}
 			<input type="hidden" id="auth_code_registration" name="auth_code">
 
 			<!-- JAVASCRIPT VALIDATION ERROR MESSAGE -->

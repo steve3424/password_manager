@@ -31,6 +31,12 @@ class User:
             flash("* Email address already registered *", "flash_email_exists")
             is_valid = False
 
+        # NOTE: If any validations fail, this flash will tell the HTML page
+        #       to make the registration tab active on the redirect since
+        #       by default the login tab is active
+        if not is_valid:
+            flash("**", "register_active")
+
         return is_valid
 
     @classmethod
