@@ -1,7 +1,7 @@
 // TODO: need a way to approximate height to make 
 //       transition smooth both ways
-function Slide(element) {
-    var form = element.nextElementSibling;
+function Slide() {
+    var form = this.nextElementSibling;
     if(form.offsetHeight > 0) {
         form.style.maxHeight = "0px";
     }
@@ -190,15 +190,35 @@ async function GetUsersVault() {
         var entry_json_string = decoder.decode(entry_decrypted);
         var entry_json = JSON.parse(entry_json_string);
 
-        // Create html for entry
+        // Create vault-entry
         var vault_entry_div = document.createElement("div");
         vault_entry_div.classList.add("vault-entry");
+
+        // Create vault-entry__title
         var vault_entry_title = document.createElement("h2");
         vault_entry_title.classList.add("vault-entry__title");
         vault_entry_title.innerHTML = entry_json["name"];
-
-        // Append everything here
+        vault_entry_title.addEventListener("click", Slide);
         vault_entry_div.appendChild(vault_entry_title);
+
+        // Create vault-entry__form
+        var vault_entry_form = document.createElement("form");
+        vault_entry_form.classList.add("vault-entry__form");
+        vault_entry_div.appendChild(vault_entry_form);
+
+        var vault_entry_form_name = document.createElement("p");
+        var vault_entry_form_login = document.createElement("p");
+        var vault_entry_form_password = document.createElement("p");
+        var vault_entry_form_website = document.createElement("p");
+        vault_entry_form_name.innerHTML = entry_json["name"];
+        vault_entry_form_login.innerHTML = entry_json["login"];
+        vault_entry_form_password.innerHTML = entry_json["password"];
+        vault_entry_form_website.innerHTML = entry_json["website"];
+        vault_entry_form.appendChild(vault_entry_form_name);
+        vault_entry_form.appendChild(vault_entry_form_login);
+        vault_entry_form.appendChild(vault_entry_form_password);
+        vault_entry_form.appendChild(vault_entry_form_website);
+
         vault_entries_dom.appendChild(vault_entry_div);
     }
 
