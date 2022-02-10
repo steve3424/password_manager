@@ -1,7 +1,8 @@
 import re
+from flask import flash
+from enum import Enum
 from flask_app.config.mysqlconnection import connectToMySQL
 from flask_app import cryptor
-from flask import flash
 
 db = "password_manager_db"
 
@@ -18,8 +19,6 @@ class User:
     def ValidateRegistrationForm(cls, form):
         is_valid = True
 
-        # TODO: Enforce 254 chars for email
-
         email = form["email"]
         if len(email) > 254:
             flash("* Email should be <= 254 characters *", "flash_email_too_long")
@@ -27,9 +26,15 @@ class User:
         elif not cls.email_regex.match(email):
             flash("* Invalid email address *", "flash_email_invalid")
             is_valid = False
-        elif cls.EmailAlreadyRegistered(form):
-            flash("* Email address already registered *", "flash_email_exists")
-            is_valid = False
+        else:
+            user_registered = cls.EmailAlreadyRegistered(form)
+            # DB ERROR
+            if user_registered == -1:
+                flash("* There was a problem with the server *", "flash_db_error")
+                is_valid = False
+            elif user_registered == True:
+                flash("* Email address already registered *", "flash_email_exists")
+                is_valid = False
 
         # NOTE: If any validations fail, this flash will tell the HTML page
         #       to make the registration tab active on the redirect since
@@ -59,8 +64,6 @@ class User:
         """
         Returns the table ID of newly inserted user
         """
-        # TODO: should check for database issue and return error
-        #       messages
         query = ("INSERT INTO users (email, auth_code) "
                  "VALUES (%(email)s, %(auth_code)s);")
         data["auth_code"] = cryptor.generate_password_hash(data["auth_code"])
@@ -71,4 +74,9 @@ class User:
         query = ("SELECT * FROM users "
                  "WHERE email=%(email)s;")
         results = connectToMySQL(db).query_db(query,form)
-        return len(results) > 0
+
+        # DB ERROR
+        if results == False:
+            return -1
+        else:
+            return len(results) > 0
