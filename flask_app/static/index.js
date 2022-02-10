@@ -1,4 +1,4 @@
-// Generating encryption key and auth code stuff
+// KEY GENERATION STUFF
 async function CreateKeyObject(key_bytes) {
     return crypto.subtle.importKey(
       "raw",                       // raw is just byte array
@@ -30,34 +30,26 @@ async function GenerateKey(key_bytes, salt_bytes, iterations) {
 
 // Generates both keys and stores them in session storage for later use
 async function GenerateEncryptionKeyAndAuthCode(form) {
+	// Generate AES key using password and email as salt
    	var encoder = new TextEncoder();
 	var	email_bytes = encoder.encode(form["email"].value);
 	var	password_bytes = encoder.encode(form["password"].value);
 	var encryption_key = await GenerateKey(password_bytes, email_bytes, 100100);
-	// STORE AES KEY FOR LATER USE WITH VAULT
-	var jwk_string = JSON.stringify(await crypto.subtle.exportKey('jwk', encryption_key));
-	window.sessionStorage.setItem("AES_KEY", jwk_string);
 
+	// STORE AES KEY FOR LATER USE WITH VAULT
+	var key_jwk = await crypto.subtle.exportKey('jwk', encryption_key);
+	var key_jwk_string = JSON.stringify(key_jwk);
+	window.sessionStorage.setItem("AES_KEY", key_jwk_string);
+
+	// Generate auth code using AES key and password as salt
 	var encryption_key_bytes = await crypto.subtle.exportKey("raw", encryption_key);
 	var auth_code = await GenerateKey(encryption_key_bytes, password_bytes, 1);
 	var auth_code_bytes = await crypto.subtle.exportKey("raw", auth_code);
 	return auth_hex_string = BytesToHexString(new Uint8Array(auth_code_bytes));
 }
 
-function LoginTabActivate(clicked_tab) {
-    var active_tab = document.querySelector(".login__tab--active");
-    active_tab.classList.remove("login__tab--active");
-    clicked_tab.classList.add("login__tab--active");
-  
-    if(clicked_tab.id === "login_tab") {
-        document.querySelector("#login_form").style.display = "block";
-        document.querySelector("#register_form").style.display = "none";
-    }
-    else {
-        document.querySelector("#login_form").style.display = "none";
-        document.querySelector("#register_form").style.display = "block";
-    }
-}
+
+// FORM VALIDATIONS
 
 async function ValidateRegistrationForm(registration_form) {
 	var is_valid = true;
@@ -123,11 +115,14 @@ function ValidateLoginForm(login_form) {
 	return is_valid;
 }
 
+
+// FORM ACTIONS
+
 async function LoginUser() {
 	var login_form = document.forms["login_form"];
 	if(ValidateLoginForm(login_form)) {
 		// Clear password fields and stick auth code in as hex string
-		document.querySelector("#auth_code_login").value = await GenerateEncryptionKeyAndAuthCode(login_form)
+		document.querySelector("#auth_code_login").value = await GenerateEncryptionKeyAndAuthCode(login_form);
 		login_form["password"].value = "";
 
 		login_form.submit();
@@ -144,4 +139,19 @@ async function RegisterUser() {
 
 		register_form.submit();
 	}
+}
+
+function LoginTabActivate(clicked_tab) {
+    var active_tab = document.querySelector(".login__tab--active");
+    active_tab.classList.remove("login__tab--active");
+    clicked_tab.classList.add("login__tab--active");
+  
+    if(clicked_tab.id === "login_tab") {
+        document.querySelector("#login_form").style.display = "block";
+        document.querySelector("#register_form").style.display = "none";
+    }
+    else {
+        document.querySelector("#login_form").style.display = "none";
+        document.querySelector("#register_form").style.display = "block";
+    }
 }
