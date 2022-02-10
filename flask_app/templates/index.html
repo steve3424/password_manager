@@ -84,6 +84,7 @@
 
 			<!-- JAVASCRIPT VALIDATION ERROR MESSAGE -->
 			<p class="error-string hidden" id="reg_email_error">* Email address is invalid</p>
+			<p class="error-string hidden" id="reg_email_length_error">* Email address must be less than 255 characters</p>
 
 			<!-- FLASH VALIDATION ERROR MESSAGE -->
 			{% with messages = get_flashed_messages(category_filter=['flash_email_too_long']) %}

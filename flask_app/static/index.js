@@ -65,16 +65,20 @@ async function ValidateRegistrationForm() {
 	// Get rid of all error messages to start, 
 	// the checks below will re-display if necessary
 	var email_error = document.querySelector("#reg_email_error");
+	var email_length_error = document.querySelector("#reg_email_length_error");
 	var password_length_error = document.querySelector("#reg_password_length_error");
 	var password_match_error = document.querySelector("#reg_password_match_error");
 	email_error.style.display = "none";
+	email_length_error.display = "none";
 	password_length_error.style.display = "none";
 	password_match_error.style.display = "none";
 
-	// TODO: Enforce 254 chars for email
-	
 	var email = register_form["email"].value;
-	if (!/^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$/.test(email)) {
+	if(email.length > 254) {
+		email_length_error.style.display = "block";
+		is_valid = false;
+	}
+	else if (!/^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$/.test(email)) {
 		email_error.style.display = "block";
 		is_valid = false;
 	}
