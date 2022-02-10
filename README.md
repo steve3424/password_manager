@@ -1,11 +1,11 @@
 # Password Manager
 
-# TO START
+## Get Started
 - Run `pip install -r requirements.txt` to install dependencies
 - Run `source DB_SETUP.sql;` in mysql shell to set up the database
 - Add file `env.py` into `flask_app.config` folder
     -- This should include:
-        ```
+        
         mysql_config = {
             "HOST"     : *host name*,
             "PASSWORD" : *mysql password*,
@@ -14,7 +14,7 @@
         }
 
         secret_key = *secret key here*
-        ```
+        
 - Run `python server.py` to start server
 
 ## Description
