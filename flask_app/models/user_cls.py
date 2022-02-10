@@ -1,6 +1,5 @@
 import re
 from flask import flash
-from enum import Enum
 from flask_app.config.mysqlconnection import connectToMySQL
 from flask_app import cryptor
 
