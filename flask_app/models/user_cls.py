@@ -50,7 +50,10 @@ class User:
                  "WHERE email=%(email)s;")
         user_rows = connectToMySQL(db).query_db(query, form)
 
-        if len(user_rows) == 0:
+        if user_rows == False:
+            flash("* There was a problem with the server *", "flash_db_error")
+            return -1
+        elif len(user_rows) == 0:
             flash("* User was not found *", "flash_user_not_found")
             return -1
         elif not cryptor.check_password_hash(user_rows[0]["auth_code"], form["auth_code"]):
