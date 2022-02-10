@@ -1,3 +1,4 @@
+// Generating encryption key and auth code stuff
 async function CreateKeyObject(key_bytes) {
     return crypto.subtle.importKey(
       "raw",                       // raw is just byte array
@@ -27,7 +28,7 @@ async function GenerateKey(key_bytes, salt_bytes, iterations) {
 	);
 }
 
-// Generates both keys and stores them in local storage for later use
+// Generates both keys and stores them in session storage for later use
 async function GenerateEncryptionKeyAndAuthCode(form) {
    	var encoder = new TextEncoder();
 	var	email_bytes = encoder.encode(form["email"].value);
@@ -58,8 +59,7 @@ function LoginTabActivate(clicked_tab) {
     }
 }
 
-async function ValidateRegistrationForm() {
-	var register_form = document.forms["register_form"];
+async function ValidateRegistrationForm(registration_form) {
 	var is_valid = true;
 
 	// Get rid of all error messages to start, 
@@ -73,7 +73,7 @@ async function ValidateRegistrationForm() {
 	password_length_error.style.display = "none";
 	password_match_error.style.display = "none";
 
-	var email = register_form["email"].value;
+	var email = registration_form["email"].value;
 	if(email.length > 254) {
 		email_length_error.style.display = "block";
 		is_valid = false;
@@ -83,29 +83,22 @@ async function ValidateRegistrationForm() {
 		is_valid = false;
 	}
 	
-	var password = register_form["password"].value;
+	var password = registration_form["password"].value;
 	if (password.length < 8 || 32 <= password.length) {
 		password_length_error.style.display = "block";
 		is_valid = false;
 	}
 	
-	var confirm_password = register_form["confirm_password"].value;
+	var confirm_password = registration_form["confirm_password"].value;
 	if (password !== confirm_password) {
 		password_match_error.style.display = "block";
 		is_valid = false;
 	}
 	
-	if(is_valid) {
-		// Clear password fields and stick auth code in as hex string
-		document.querySelector("#auth_code_registration").value = await GenerateEncryptionKeyAndAuthCode(register_form);
-		register_form["password"].value = "";
-		register_form["confirm_password"].value = "";
-		register_form.submit();
-	}
+	return is_valid;
 }
 
-async function ValidateLoginForm() {
-	var login_form = document.forms["login_form"];
+function ValidateLoginForm(login_form) {
 	var is_valid = true;
 	
 	// Get rid of all error messages to start, 
@@ -127,11 +120,28 @@ async function ValidateLoginForm() {
 		is_valid = false;
 	}
 	
-	if(is_valid) {
+	return is_valid;
+}
+
+async function LoginUser() {
+	var login_form = document.forms["login_form"];
+	if(ValidateLoginForm(login_form)) {
 		// Clear password fields and stick auth code in as hex string
 		document.querySelector("#auth_code_login").value = await GenerateEncryptionKeyAndAuthCode(login_form)
 		login_form["password"].value = "";
 
 		login_form.submit();
+	}
+}
+
+async function RegisterUser() {
+	var registration_form = document.forms["registraton_form"];
+	if(ValidateRegistrationForm(registration_form)) {
+		// Clear password fields and stick auth code in as hex string
+		document.querySelector("#auth_code_registration").value = await GenerateEncryptionKeyAndAuthCode(register_form);
+		register_form["password"].value = "";
+		register_form["confirm_password"].value = "";
+
+		register_form.submit();
 	}
 }
