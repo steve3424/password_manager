@@ -55,6 +55,15 @@
 				{% endif %}
 			{% endwith %}
 
+			<!-- FLASH VALIDATION ERROR MESSAGE -->
+			{% with messages = get_flashed_messages(category_filter=['flash_db_error']) %}
+				{% if messages %}
+					{% for message in messages %}
+						<p class="error-string">{{ message }}</p>
+					{% endfor %}
+				{% endif %}
+			{% endwith %}
+
 			<input class="form-card__input" id="test" type="text" name="email" placeholder="Email Address">
 
 			<!-- JAVASCRIPT VALIDATION ERROR MESSAGE -->
@@ -75,9 +84,9 @@
 		<!-- SET REGISTER FORM TO ACTIVE IF FLASH MESSAGE OCCURED THERE -->
 		{% with messages = get_flashed_messages(category_filter=['register_active']) %}
 				{% if messages %}
-		<form class="form-card" id="register_form" name="register_form" onsubmit="RegisterUser(); return false;" action="/register" method="post">
+		<form class="form-card" id="registration_form" name="registration_form" onsubmit="RegisterUser(); return false;" action="/register" method="post">
 				{% else %}
-		<form class="form-card hidden" id="register_form" name="register_form" onsubmit="RegisterUser(); return false;" action="/register" method="post">
+		<form class="form-card hidden" id="registration_form" name="registration_form" onsubmit="RegisterUser(); return false;" action="/register" method="post">
 				{% endif %}
 		{% endwith %}
 			<input type="hidden" id="auth_code_registration" name="auth_code">
@@ -106,6 +115,15 @@
 
 			<!-- FLASH VALIDATION ERROR MESSAGE -->
 			{% with messages = get_flashed_messages(category_filter=['flash_email_exists']) %}
+				{% if messages %}
+					{% for message in messages %}
+						<p class="error-string">{{ message }}</p>
+					{% endfor %}
+				{% endif %}
+			{% endwith %}
+
+			<!-- FLASH VALIDATION ERROR MESSAGE -->
+			{% with messages = get_flashed_messages(category_filter=['flash_db_error']) %}
 				{% if messages %}
 					{% for message in messages %}
 						<p class="error-string">{{ message }}</p>

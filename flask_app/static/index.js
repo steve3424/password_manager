@@ -130,14 +130,14 @@ async function LoginUser() {
 }
 
 async function RegisterUser() {
-	var registration_form = document.forms["registraton_form"];
+	var registration_form = document.forms["registration_form"];
 	if(ValidateRegistrationForm(registration_form)) {
 		// Clear password fields and stick auth code in as hex string
-		document.querySelector("#auth_code_registration").value = await GenerateEncryptionKeyAndAuthCode(register_form);
-		register_form["password"].value = "";
-		register_form["confirm_password"].value = "";
+		document.querySelector("#auth_code_registration").value = await GenerateEncryptionKeyAndAuthCode(registration_form);
+		registration_form["password"].value = "";
+		registration_form["confirm_password"].value = "";
 
-		register_form.submit();
+		registration_form.submit();
 	}
 }
 
@@ -148,10 +148,10 @@ function LoginTabActivate(clicked_tab) {
   
     if(clicked_tab.id === "login_tab") {
         document.querySelector("#login_form").style.display = "block";
-        document.querySelector("#register_form").style.display = "none";
+        document.querySelector("#registration_form").style.display = "none";
     }
     else {
         document.querySelector("#login_form").style.display = "none";
-        document.querySelector("#register_form").style.display = "block";
+        document.querySelector("#registration_form").style.display = "block";
     }
 }
