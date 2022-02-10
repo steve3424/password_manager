@@ -36,9 +36,9 @@
 		<!-- SET REGISTER FORM TO ACTIVE IF FLASH MESSAGE OCCURED THERE -->
 		{% with messages = get_flashed_messages(category_filter=['register_active']) %}
 				{% if messages %}
-		<form class="form-card hidden" id="login_form" name="login_form" onsubmit="ValidateLoginForm(); return false;" action="/login" method="post">
+		<form class="form-card hidden" id="login_form" name="login_form" onsubmit="LoginUser(); return false;" action="/login" method="post">
 				{% else %}
-		<form class="form-card" id="login_form" name="login_form" onsubmit="ValidateLoginForm(); return false;" action="/login" method="post">
+		<form class="form-card" id="login_form" name="login_form" onsubmit="LoginUser(); return false;" action="/login" method="post">
 				{% endif %}
 		{% endwith %}
 			<input type="hidden" id="auth_code_login" name="auth_code">
@@ -75,9 +75,9 @@
 		<!-- SET REGISTER FORM TO ACTIVE IF FLASH MESSAGE OCCURED THERE -->
 		{% with messages = get_flashed_messages(category_filter=['register_active']) %}
 				{% if messages %}
-		<form class="form-card" id="register_form" name="register_form" onsubmit="ValidateRegistrationForm(); return false;" action="/register" method="post">
+		<form class="form-card" id="register_form" name="register_form" onsubmit="RegisterUser(); return false;" action="/register" method="post">
 				{% else %}
-		<form class="form-card hidden" id="register_form" name="register_form" onsubmit="ValidateRegistrationForm(); return false;" action="/register" method="post">
+		<form class="form-card hidden" id="register_form" name="register_form" onsubmit="RegisterUser(); return false;" action="/register" method="post">
 				{% endif %}
 		{% endwith %}
 			<input type="hidden" id="auth_code_registration" name="auth_code">
