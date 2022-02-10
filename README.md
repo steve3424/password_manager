@@ -1,5 +1,23 @@
 # Password Manager
 
+# TO START
+- Run `pip install -r requirements.txt` to install dependencies
+- Run `source DB_SETUP.sql;` in mysql shell to set up the database
+- Add file `env.py` into `flask_app.config` folder
+    -- This should include:
+        ```
+        mysql_config = {
+            "HOST"     : *host name*,
+            "PASSWORD" : *mysql password*,
+            "USER"     : *mysql username*,
+            "DB"       : "password_manager_db"
+        }
+
+        secret_key = *secret key here*
+        ```
+- Run `python server.py` to start server
+
+## Description
 This is a zero knowledge password manager. The user can create a vault which is just a list of usernames, passwords, and the associated account/website. The user will sign up with a master password which is used to encrypt/decrypt their entire vault. The important parts are that the master password never leaves the clients computer and all encryption/decryption of the vault is done on the client's machine. The server never sees the plain text password and never sees the unencrypted vault. 
 
 ## Encryption steps
