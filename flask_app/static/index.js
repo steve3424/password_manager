@@ -51,7 +51,7 @@ async function GenerateEncryptionKeyAndAuthCode(form) {
 
 // FORM VALIDATIONS
 
-async function ValidateRegistrationForm(registration_form) {
+function ValidateRegistrationForm(registration_form) {
 	var is_valid = true;
 
 	// Get rid of all error messages to start, 
