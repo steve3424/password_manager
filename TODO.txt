@@ -2,8 +2,7 @@
 
 - Style up entry form
 	-- entry form and new entry form should be basically the same, maybe different sized or colors
-- Edit entry
-- Delete entry
+- Edit and delete entry functions may need some cleanup
 - Add backend validations to new entry form
 - Make sure the lengths I'm enforcing are correct for all forms
 - Complete DB set up script
