@@ -14,13 +14,15 @@
 // }
 
 // TESTING
-function Slide(e) {
-    var form = e.nextElementSibling;
+function Slide() {
+    var form = this.nextElementSibling;
     if(form.offsetHeight > 0) {
+        console.log("close");
         form.style.maxHeight = "0px";
         form.style.padding = "0px";
     }
     else {
+        console.log("open");
         form.style.maxHeight = "500px";
         form.style.padding = "15px";
     }
@@ -31,7 +33,7 @@ var prev_values = {};
 
 // Set up buttons to swap
 var edit_discard_btns = document.createElement("a");
-edit_discard_btns.setAttribute("id", "discard-btn");
+edit_discard_btns.classList.add("discard-btn");
 edit_discard_btns.classList.add("button");
 edit_discard_btns.innerHTML = "Discard";
 edit_discard_btns.onclick = function() {
@@ -40,41 +42,41 @@ edit_discard_btns.onclick = function() {
     for(var i = 0; i < form_inputs.length; ++i) {
         form_inputs[i].disabled = true;
         form_inputs[i].style.border = "2px solid transparent";
-        form_inputs[i].value = prev_values[form_inputs[i].id];
+        form_inputs[i].value = prev_values[form_inputs[i].name];
     }
 
     // Swap buttons
-    var discard_btn = document.querySelector("#discard-btn");
+    var discard_btn = this.parentNode.querySelector(".discard-btn");
     discard_btn.parentNode.replaceChild(edit_discard_btns, discard_btn);
     edit_discard_btns = discard_btn;
-    var save_btn = document.querySelector("#save-btn");
+    var save_btn = this.parentNode.querySelector(".save-btn");
     save_btn.parentNode.replaceChild(save_delete_btns, save_btn);
     save_delete_btns = save_btn;
 };
 
 var save_delete_btns = document.createElement("a");
-save_delete_btns.setAttribute("id", "save-btn");
+save_delete_btns.classList.add("save-btn");
 save_delete_btns.classList.add("button");
 save_delete_btns.innerHTML = "Save";
 save_delete_btns.onclick = function() {
     console.log(this.innerHTML);
 };
 
-function BeginEdit(el) {
-    var form_inputs = el.parentNode.querySelectorAll(".vault-entry__input");
+function BeginEdit() {
+    var form_inputs = this.parentNode.querySelectorAll(".vault-entry__input");
     for(var i = 0; i < form_inputs.length; ++i) {
         form_inputs[i].disabled = false;
         form_inputs[i].style.border = "2px solid black";
         // Need to cache the previous values in 
         // case user wants to discard changes
-        prev_values[form_inputs[i].id] = form_inputs[i].value;
+        prev_values[form_inputs[i].name] = form_inputs[i].value;
     }
 
     // Swap buttons
-    var edit_btn = document.querySelector("#edit-btn");
+    var edit_btn = this.parentNode.querySelector(".edit-btn");
     edit_btn.parentNode.replaceChild(edit_discard_btns, edit_btn);
     edit_discard_btns = edit_btn;
-    var delete_btn = document.querySelector("#delete-btn");
+    var delete_btn = this.parentNode.querySelector(".delete-btn");
     delete_btn.parentNode.replaceChild(save_delete_btns, delete_btn);
     save_delete_btns = delete_btn;
 }
@@ -258,7 +260,7 @@ async function GetUsersVault() {
     // TODO: Get Key will eventually be done once on load
     var decryption_key = await GetKeyFromSession();
 
-    var vault = await fetch(window.location.host + "/get_user_vault");
+    var vault = await fetch("http://" + window.location.host + "/get_user_vault");
     var vault_json = await vault.json();
 
     var decoder = new TextDecoder();
@@ -296,18 +298,129 @@ async function GetUsersVault() {
         vault_entry_form.classList.add("vault-entry__form");
         vault_entry_div.appendChild(vault_entry_form);
 
-        var vault_entry_form_name = document.createElement("p");
-        var vault_entry_form_login = document.createElement("p");
-        var vault_entry_form_password = document.createElement("p");
-        var vault_entry_form_website = document.createElement("p");
-        vault_entry_form_name.innerHTML = entry_json["name"];
-        vault_entry_form_login.innerHTML = entry_json["login"];
-        vault_entry_form_password.innerHTML = entry_json["password"];
-        vault_entry_form_website.innerHTML = entry_json["website"];
-        vault_entry_form.appendChild(vault_entry_form_name);
-        vault_entry_form.appendChild(vault_entry_form_login);
-        vault_entry_form.appendChild(vault_entry_form_password);
-        vault_entry_form.appendChild(vault_entry_form_website);
+        // Hidden inputs for secure form submission
+        var encrypted_entry_hex = document.createElement("input");
+        encrypted_entry_hex.type = "hidden";
+        encrypted_entry_hex.name = "encrypted_entry_hex";
+        var iv_hex = document.createElement("input");
+        iv_hex.type = "hidden";
+        iv_hex.name = "iv_hex";
+        vault_entry_form.appendChild(encrypted_entry_hex);
+        vault_entry_form.appendChild(iv_hex);
+
+        // Create name section
+        var name_label = document.createElement("p");
+        name_label.classList.add("new-entry__label");
+        name_label.innerHTML = "Name";
+        var name_too_short_error = document.createElement("p");
+        name_too_short_error.classList.add("error-string");
+        name_too_short_error.classList.add("hidden");
+        name_too_short_error.setAttribute("id", "name_too_short_error");
+        name_too_short_error.innerHTML = "* Please enter a name";
+        var name_too_long_error = document.createElement("p");
+        name_too_long_error.classList.add("error-string");
+        name_too_long_error.classList.add("hidden");
+        name_too_long_error.setAttribute("id", "name_too_long_error");
+        name_too_long_error.innerHTML = "* Name must be less than 65 chars";
+        var name_input = document.createElement("input");
+        name_input.classList.add("vault-entry__input");
+        name_input.disabled = true;
+        name_input.name = "name";
+        name_input.type = "text";
+        name_input.value = entry_json["name"];
+        vault_entry_form.appendChild(name_label);
+        vault_entry_form.appendChild(name_too_short_error);
+        vault_entry_form.appendChild(name_too_long_error);
+        vault_entry_form.appendChild(name_input);
+
+        // Create login section
+        var login_label = document.createElement("p");
+        login_label.classList.add("new-entry__label");
+        login_label.innerHTML = "Login";
+        var login_too_short_error = document.createElement("p");
+        login_too_short_error.classList.add("error-string");
+        login_too_short_error.classList.add("hidden");
+        login_too_short_error.setAttribute("id", "login_too_short_error");
+        login_too_short_error.innerHTML = "* Please enter a login";
+        var login_too_long_error = document.createElement("p");
+        login_too_long_error.classList.add("error-string");
+        login_too_long_error.classList.add("hidden");
+        login_too_long_error.setAttribute("id", "login_too_long_error");
+        login_too_long_error.innerHTML = "* Login must be less than 65 chars";
+        var login_input = document.createElement("input");
+        login_input.classList.add("vault-entry__input");
+        login_input.disabled = true;
+        login_input.name = "login";
+        login_input.type = "text";
+        login_input.value = entry_json["login"];
+        vault_entry_form.appendChild(login_label);
+        vault_entry_form.appendChild(login_too_short_error);
+        vault_entry_form.appendChild(login_too_long_error);
+        vault_entry_form.appendChild(login_input);
+
+        // Create password section
+        var password_label = document.createElement("p");
+        password_label.classList.add("new-entry__label");
+        password_label.innerHTML = "Password";
+        var password_too_short_error = document.createElement("p");
+        password_too_short_error.classList.add("error-string");
+        password_too_short_error.classList.add("hidden");
+        password_too_short_error.setAttribute("id", "password_too_short_error");
+        password_too_short_error.innerHTML = "* Please enter a password";
+        var password_too_long_error = document.createElement("p");
+        password_too_long_error.classList.add("error-string");
+        password_too_long_error.classList.add("hidden");
+        password_too_long_error.setAttribute("id", "password_too_long_error");
+        password_too_long_error.innerHTML = "* Password must be less than 65 chars";
+        var password_input = document.createElement("input");
+        password_input.classList.add("vault-entry__input");
+        password_input.disabled = true;
+        password_input.name = "password";
+        password_input.type = "text";
+        password_input.value = entry_json["password"];
+        vault_entry_form.appendChild(password_label);
+        vault_entry_form.appendChild(password_too_short_error);
+        vault_entry_form.appendChild(password_too_long_error);
+        vault_entry_form.appendChild(password_input);
+
+        // Create website section
+        var website_label = document.createElement("p");
+        website_label.classList.add("new-entry__label");
+        website_label.innerHTML = "Website";
+        var website_too_short_error = document.createElement("p");
+        website_too_short_error.classList.add("error-string");
+        website_too_short_error.classList.add("hidden");
+        website_too_short_error.setAttribute("id", "website_too_short_error");
+        website_too_short_error.innerHTML = "* Please enter a website";
+        var website_too_long_error = document.createElement("p");
+        website_too_long_error.classList.add("error-string");
+        website_too_long_error.classList.add("hidden");
+        website_too_long_error.setAttribute("id", "website_too_long_error");
+        website_too_long_error.innerHTML = "* Website must be less than 65 chars";
+        var website_input = document.createElement("input");
+        website_input.classList.add("vault-entry__input");
+        website_input.disabled = true;
+        website_input.name = "website";
+        website_input.type = "text";
+        website_input.value = entry_json["website"];
+        vault_entry_form.appendChild(website_label);
+        vault_entry_form.appendChild(website_too_short_error);
+        vault_entry_form.appendChild(website_too_long_error);
+        vault_entry_form.appendChild(website_input);
+
+        // Create edit/delete btns
+        var edit_btn = document.createElement("a");
+        edit_btn.classList.add("edit-btn");
+        edit_btn.classList.add("button");
+        edit_btn.onclick = BeginEdit;
+        edit_btn.innerHTML = "Edit";
+        var delete_btn = document.createElement("a");
+        delete_btn.classList.add("delete-btn");
+        delete_btn.classList.add("button");
+        // delete_btn.onclick = BeginEdit;
+        delete_btn.innerHTML = "Delete";
+        vault_entry_form.appendChild(edit_btn);
+        vault_entry_form.appendChild(delete_btn);
 
         vault_entries_dom.appendChild(vault_entry_div);
     }
