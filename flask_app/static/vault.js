@@ -3,67 +3,27 @@
 // TODO: Instead of changing styles individually
 //       just add and remove class here
 // TODO: Add shadow on bottom of title
-// function Slide() {
-//     var form = this.nextElementSibling;
-//     if(form.offsetHeight > 0) {
-//         form.style.maxHeight = "0px";
-//     }
-//     else {
-//         form.style.maxHeight = "500px";
-//     }
-// }
-
-// TESTING
 function Slide() {
     var form = this.nextElementSibling;
     if(form.offsetHeight > 0) {
-        console.log("close");
         form.style.maxHeight = "0px";
         form.style.padding = "0px";
     }
     else {
-        console.log("open");
         form.style.maxHeight = "500px";
         form.style.padding = "15px";
     }
 }
 
-// Save prev values for discarding edits
-var prev_values = {};
+// Save edit states for all vault entries
+var edit_states = [];
 
 // Set up buttons to swap
-var edit_discard_btns = document.createElement("a");
-edit_discard_btns.classList.add("discard-btn");
-edit_discard_btns.classList.add("button");
-edit_discard_btns.innerHTML = "Discard";
-edit_discard_btns.onclick = function() {
-    // Restore all values
-    var form_inputs = this.parentNode.querySelectorAll(".vault-entry__input");
-    for(var i = 0; i < form_inputs.length; ++i) {
-        form_inputs[i].disabled = true;
-        form_inputs[i].style.border = "2px solid transparent";
-        form_inputs[i].value = prev_values[form_inputs[i].name];
-    }
-
-    // Swap buttons
-    var discard_btn = this.parentNode.querySelector(".discard-btn");
-    discard_btn.parentNode.replaceChild(edit_discard_btns, discard_btn);
-    edit_discard_btns = discard_btn;
-    var save_btn = this.parentNode.querySelector(".save-btn");
-    save_btn.parentNode.replaceChild(save_delete_btns, save_btn);
-    save_delete_btns = save_btn;
-};
-
-var save_delete_btns = document.createElement("a");
-save_delete_btns.classList.add("save-btn");
-save_delete_btns.classList.add("button");
-save_delete_btns.innerHTML = "Save";
-save_delete_btns.onclick = function() {
-    console.log(this.innerHTML);
-};
-
 function BeginEdit() {
     var form_inputs = this.parentNode.querySelectorAll(".vault-entry__input");
+    var entry_id = this.parentNode.parentNode.id.slice(-1);
+    var edit_state = edit_states[entry_id];
+    var prev_values = edit_state["prev_values"];
     for(var i = 0; i < form_inputs.length; ++i) {
         form_inputs[i].disabled = false;
         form_inputs[i].style.border = "2px solid black";
@@ -74,32 +34,32 @@ function BeginEdit() {
 
     // Swap buttons
     var edit_btn = this.parentNode.querySelector(".edit-btn");
-    edit_btn.parentNode.replaceChild(edit_discard_btns, edit_btn);
-    edit_discard_btns = edit_btn;
     var delete_btn = this.parentNode.querySelector(".delete-btn");
-    delete_btn.parentNode.replaceChild(save_delete_btns, delete_btn);
-    save_delete_btns = delete_btn;
+    edit_btn.parentNode.replaceChild(edit_state["edit_discard_btns"], edit_btn);
+    delete_btn.parentNode.replaceChild(edit_state["save_delete_btns"], delete_btn);
+    edit_state["edit_discard_btns"] = edit_btn;
+    edit_state["save_delete_btns"] = delete_btn;
 }
 
-function EndEdit(el) {
-    // Make editable inputs un-editable again
-    var form_inputs = el.parentNode.querySelectorAll(".vault-entry__input");
+function DiscardEdit() {
+    // Restore all values
+    var form_inputs = this.parentNode.querySelectorAll(".vault-entry__input");
+    var entry_id = this.parentNode.parentNode.id.slice(-1);
+    var edit_state = edit_states[entry_id];
+    var prev_values = edit_state["prev_values"];
     for(var i = 0; i < form_inputs.length; ++i) {
-        // form_inputs[i].style.backgroundColor = "#009879";
         form_inputs[i].disabled = true;
-        // Restore prev values from dictionary cache
-        form_inputs[i].value = prev_values[form_inputs[i].id];
+        form_inputs[i].style.border = "2px solid transparent";
+        form_inputs[i].value = prev_values[form_inputs[i].name];
     }
-
-    // Change discard back to edit
-    var edit_btn = document.querySelector("#edit-btn");
-    edit_btn.innerHTML = "Edit";
-    edit_btn.onclick = BeginEdit;
-
-    // // Swap save w/ delete btn
-    // var save_btn = document.querySelector("#save-btn");
-    // save_btn.parentNode.replaceChild(temp_btn, save_btn);
-    // temp_btn = save_btn;
+    
+    // Swap buttons
+    var discard_btn = this.parentNode.querySelector(".discard-btn");
+    var save_btn = this.parentNode.querySelector(".save-btn");
+    discard_btn.parentNode.replaceChild(edit_state["edit_discard_btns"], discard_btn);
+    save_btn.parentNode.replaceChild(edit_state["save_delete_btns"], save_btn);
+    edit_state["edit_discard_btns"] = discard_btn;
+    edit_state["save_delete_btns"] = save_btn;
 }
 
 var add_section = document.querySelector(".new-entry");
@@ -257,7 +217,6 @@ async function SavePassword() {
 }
 
 async function GetUsersVault() {
-    // TODO: Get Key will eventually be done once on load
     var decryption_key = await GetKeyFromSession();
 
     var vault = await fetch("http://" + window.location.host + "/get_user_vault");
@@ -266,8 +225,6 @@ async function GetUsersVault() {
     var decoder = new TextDecoder();
     var entries = vault_json["vault"];
     var vault_entries_dom = document.querySelector("#vault-entries");
-    // TODO: These should probably be put into an array
-    //       so they can be manipulated in memory
     for(var i = 0; i < entries.length; ++i) {
         var entry_bytes = HexStringToBytes(entries[i]["entry"]);
         var iv_bytes    = HexStringToBytes(entries[i]["iv"]);
@@ -284,6 +241,7 @@ async function GetUsersVault() {
 
         // Create vault-entry
         var vault_entry_div = document.createElement("div");
+        vault_entry_div.setAttribute("id", "entry_" + i);
         vault_entry_div.classList.add("vault-entry");
 
         // Create vault-entry__title
@@ -417,10 +375,31 @@ async function GetUsersVault() {
         var delete_btn = document.createElement("a");
         delete_btn.classList.add("delete-btn");
         delete_btn.classList.add("button");
-        // delete_btn.onclick = BeginEdit;
         delete_btn.innerHTML = "Delete";
         vault_entry_form.appendChild(edit_btn);
         vault_entry_form.appendChild(delete_btn);
+
+        // Init edit states
+        var edit_discard_btns = document.createElement("a");
+        edit_discard_btns.classList.add("discard-btn");
+        edit_discard_btns.classList.add("button");
+        edit_discard_btns.innerHTML = "Discard";
+        edit_discard_btns.onclick = DiscardEdit;
+        
+        var save_delete_btns = document.createElement("a");
+        save_delete_btns.classList.add("save-btn");
+        save_delete_btns.classList.add("button");
+        save_delete_btns.innerHTML = "Save";
+        save_delete_btns.onclick = function() {
+            console.log(this.innerHTML);
+        };
+
+        var edit_state = {
+            prev_values       : {},
+            edit_discard_btns : edit_discard_btns,
+            save_delete_btns  : save_delete_btns
+        }
+        edit_states.push(edit_state);
 
         vault_entries_dom.appendChild(vault_entry_div);
     }
