@@ -51,6 +51,41 @@
 
         <!-- This is populated by vault entries when the page loads -->
         <div id="vault-entries">
+            <!-- TESTING -->
+            <div class="vault-entry">
+                <h2 class="vault-entry__title" onclick="Slide(this)">Entry</h2>
+                <form class="vault-entry__form">
+                    <input type="hidden" name="encrypted_entry_hex">
+                    <input type="hidden" name="iv_hex">
+
+                    <p class="new-entry__label">Name</p>
+                    <!-- JAVASCRIPT VALIDATION ERROR MESSAGES -->
+                    <p class="error-string hidden" id="name_too_short_error">* Please enter a name</p>
+                    <p class="error-string hidden" id="name_too_long_error">* Name must be less than 65 chars</p>
+                    <input class="vault-entry__input" disabled="true" name="name" type="text" value="NAME HERE JINJA">
+    
+                    <p class="new-entry__label">Login</p>
+                    <!-- JAVASCRIPT VALIDATION ERROR MESSAGES -->
+                    <p class="error-string hidden" id="login_too_short_error">* Please enter a login</p>
+                    <p class="error-string hidden" id="login_too_long_error">* Login must be less than 65 chars</p>
+                    <input class="vault-entry__input" disabled="true" name="login" type="text" value="NAME HERE JINJA">
+    
+                    <p class="new-entry__label">Password</p>
+                    <!-- JAVASCRIPT VALIDATION ERROR MESSAGES -->
+                    <p class="error-string hidden" id="password_too_short_error">* Please enter a password</p>
+                    <p class="error-string hidden" id="password_too_long_error">* Password must be less than 65 chars</p>
+                    <input class="vault-entry__input" disabled="true" name="password" type="text" value="NAME HERE JINJA">
+    
+                    <p class="new-entry__label">Website</p>
+                    <!-- JAVASCRIPT VALIDATION ERROR MESSAGES -->
+                    <p class="error-string hidden" id="website_too_short_error">* Please enter a website</p>
+                    <p class="error-string hidden" id="website_too_long_error">* Website must be less than 65 chars</p>
+                    <input class="vault-entry__input" disabled="true" name="website" type="text" value="NAME HERE JINJA">
+
+                    <a id="edit-btn" class="button" onclick="BeginEdit(this)">Edit</a>
+                    <a id="delete-btn" class="button">Delete</a>
+                </form>
+            </div>
         </div>
     </div>
 </body>

@@ -1,13 +1,103 @@
 // TODO: need a way to approximate height to make 
 //       transition smooth both ways
-function Slide() {
-    var form = this.nextElementSibling;
+// TODO: Instead of changing styles individually
+//       just add and remove class here
+// TODO: Add shadow on bottom of title
+// function Slide() {
+//     var form = this.nextElementSibling;
+//     if(form.offsetHeight > 0) {
+//         form.style.maxHeight = "0px";
+//     }
+//     else {
+//         form.style.maxHeight = "500px";
+//     }
+// }
+
+// TESTING
+function Slide(e) {
+    var form = e.nextElementSibling;
     if(form.offsetHeight > 0) {
         form.style.maxHeight = "0px";
+        form.style.padding = "0px";
     }
     else {
         form.style.maxHeight = "500px";
+        form.style.padding = "15px";
     }
+}
+
+// Save prev values for discarding edits
+var prev_values = {};
+
+// Set up buttons to swap
+var edit_discard_btns = document.createElement("a");
+edit_discard_btns.setAttribute("id", "discard-btn");
+edit_discard_btns.classList.add("button");
+edit_discard_btns.innerHTML = "Discard";
+edit_discard_btns.onclick = function() {
+    // Restore all values
+    var form_inputs = this.parentNode.querySelectorAll(".vault-entry__input");
+    for(var i = 0; i < form_inputs.length; ++i) {
+        form_inputs[i].disabled = true;
+        form_inputs[i].style.border = "2px solid transparent";
+        form_inputs[i].value = prev_values[form_inputs[i].id];
+    }
+
+    // Swap buttons
+    var discard_btn = document.querySelector("#discard-btn");
+    discard_btn.parentNode.replaceChild(edit_discard_btns, discard_btn);
+    edit_discard_btns = discard_btn;
+    var save_btn = document.querySelector("#save-btn");
+    save_btn.parentNode.replaceChild(save_delete_btns, save_btn);
+    save_delete_btns = save_btn;
+};
+
+var save_delete_btns = document.createElement("a");
+save_delete_btns.setAttribute("id", "save-btn");
+save_delete_btns.classList.add("button");
+save_delete_btns.innerHTML = "Save";
+save_delete_btns.onclick = function() {
+    console.log(this.innerHTML);
+};
+
+function BeginEdit(el) {
+    var form_inputs = el.parentNode.querySelectorAll(".vault-entry__input");
+    for(var i = 0; i < form_inputs.length; ++i) {
+        form_inputs[i].disabled = false;
+        form_inputs[i].style.border = "2px solid black";
+        // Need to cache the previous values in 
+        // case user wants to discard changes
+        prev_values[form_inputs[i].id] = form_inputs[i].value;
+    }
+
+    // Swap buttons
+    var edit_btn = document.querySelector("#edit-btn");
+    edit_btn.parentNode.replaceChild(edit_discard_btns, edit_btn);
+    edit_discard_btns = edit_btn;
+    var delete_btn = document.querySelector("#delete-btn");
+    delete_btn.parentNode.replaceChild(save_delete_btns, delete_btn);
+    save_delete_btns = delete_btn;
+}
+
+function EndEdit(el) {
+    // Make editable inputs un-editable again
+    var form_inputs = el.parentNode.querySelectorAll(".vault-entry__input");
+    for(var i = 0; i < form_inputs.length; ++i) {
+        // form_inputs[i].style.backgroundColor = "#009879";
+        form_inputs[i].disabled = true;
+        // Restore prev values from dictionary cache
+        form_inputs[i].value = prev_values[form_inputs[i].id];
+    }
+
+    // Change discard back to edit
+    var edit_btn = document.querySelector("#edit-btn");
+    edit_btn.innerHTML = "Edit";
+    edit_btn.onclick = BeginEdit;
+
+    // // Swap save w/ delete btn
+    // var save_btn = document.querySelector("#save-btn");
+    // save_btn.parentNode.replaceChild(temp_btn, save_btn);
+    // temp_btn = save_btn;
 }
 
 var add_section = document.querySelector(".new-entry");
@@ -168,7 +258,7 @@ async function GetUsersVault() {
     // TODO: Get Key will eventually be done once on load
     var decryption_key = await GetKeyFromSession();
 
-    var vault = await fetch("http://localhost:5000/get_user_vault");
+    var vault = await fetch(window.location.host + "/get_user_vault");
     var vault_json = await vault.json();
 
     var decoder = new TextDecoder();
