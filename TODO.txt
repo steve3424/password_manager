@@ -8,6 +8,11 @@
 - Make sure the lengths I'm enforcing are correct for all forms
 - Complete DB set up script
 - Add eyeball functionality to new entry password
+- new entry form and entry edit forms can probably be condensed and reused, code paths are slightly different
+- GetUsersVault will probably be slow for large vaults
+	- Parallel loop
+	- Create single vault entry dom node and make copy for each entry?
+	- Get db id on fetch and use that as a dict key into edit states instead of incremented counter
 
 - Should I use html forms at all since I am clearing them out or just send json?
     -- I would have to do all of the redirection in Javascript
