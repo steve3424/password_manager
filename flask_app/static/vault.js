@@ -21,7 +21,7 @@ var edit_states = {};
 // Set up buttons to swap
 function BeginEdit() {
     var form_inputs = this.parentNode.querySelectorAll(".vault-entry__input");
-    var entry_id = this.parentNode.parentNode.id.slice(-1);
+    var entry_id = this.parentNode.parentNode.id;
     var edit_state = edit_states[entry_id];
     var prev_values = edit_state["prev_values"];
     for(var i = 0; i < form_inputs.length; ++i) {
@@ -44,7 +44,7 @@ function BeginEdit() {
 function DiscardEdit() {
     // Restore all values
     var form_inputs = this.parentNode.querySelectorAll(".vault-entry__input");
-    var entry_id = this.parentNode.parentNode.id.slice(-1);
+    var entry_id = this.parentNode.parentNode.id;
     var edit_state = edit_states[entry_id];
     var prev_values = edit_state["prev_values"];
     for(var i = 0; i < form_inputs.length; ++i) {
@@ -241,7 +241,7 @@ async function GetUsersVault() {
 
         // Create vault-entry
         var vault_entry_div = document.createElement("div");
-        vault_entry_div.setAttribute("id", "entry_" + entries[i]["id"]);
+        vault_entry_div.setAttribute("id", entries[i]["id"]);
         vault_entry_div.classList.add("vault-entry");
 
         // Create vault-entry__title
