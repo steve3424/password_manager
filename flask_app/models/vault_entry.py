@@ -13,7 +13,7 @@ class VaultEntry():
 
     @classmethod
     def GetUserVault(cls, data):
-        query = ("SELECT entry,iv FROM vault "
+        query = ("SELECT id,entry,iv FROM vault "
                  "WHERE user_id=%(user_id)s;")
         results = connectToMySQL(mysql_config["DB"]).query_db(query, data)
         # TODO: check for any errors

@@ -16,7 +16,7 @@ function Slide() {
 }
 
 // Save edit states for all vault entries
-var edit_states = [];
+var edit_states = {};
 
 // Set up buttons to swap
 function BeginEdit() {
@@ -241,7 +241,7 @@ async function GetUsersVault() {
 
         // Create vault-entry
         var vault_entry_div = document.createElement("div");
-        vault_entry_div.setAttribute("id", "entry_" + i);
+        vault_entry_div.setAttribute("id", "entry_" + entries[i]["id"]);
         vault_entry_div.classList.add("vault-entry");
 
         // Create vault-entry__title
@@ -375,6 +375,7 @@ async function GetUsersVault() {
         var delete_btn = document.createElement("a");
         delete_btn.classList.add("delete-btn");
         delete_btn.classList.add("button");
+        // delete_btn.onclick = DeleteEntry;
         delete_btn.innerHTML = "Delete";
         vault_entry_form.appendChild(edit_btn);
         vault_entry_form.appendChild(delete_btn);
@@ -393,13 +394,12 @@ async function GetUsersVault() {
         save_delete_btns.onclick = function() {
             console.log(this.innerHTML);
         };
-
         var edit_state = {
             prev_values       : {},
             edit_discard_btns : edit_discard_btns,
             save_delete_btns  : save_delete_btns
         }
-        edit_states.push(edit_state);
+        edit_states[entries[i]["id"].toString()]= edit_state;
 
         vault_entries_dom.appendChild(vault_entry_div);
     }
