@@ -23,6 +23,11 @@ def VaultAddEntry():
     else:
         return redirect("/")
 
+@app.route("/vault/delete_entry/<int:entry_id>")
+def VaultDeleteEntry(entry_id):
+    print(entry_id)
+    return redirect("/vault")
+
 @app.route("/get_user_vault")
 def GetUserVault():
     if "user_id" in session:

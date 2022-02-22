@@ -375,7 +375,7 @@ async function GetUsersVault() {
         var delete_btn = document.createElement("a");
         delete_btn.classList.add("delete-btn");
         delete_btn.classList.add("button");
-        // delete_btn.onclick = DeleteEntry;
+        delete_btn.href = "/vault/delete_entry/" + entries[i]["id"];
         delete_btn.innerHTML = "Delete";
         vault_entry_form.appendChild(edit_btn);
         vault_entry_form.appendChild(delete_btn);
