@@ -25,8 +25,15 @@ def VaultAddEntry():
 
 @app.route("/vault/delete_entry/<int:entry_id>")
 def VaultDeleteEntry(entry_id):
-    print(entry_id)
-    return redirect("/vault")
+    if "user_id" in session:
+        data = {
+            "entry_id" : entry_id,
+            "user_id"  : session["user_id"]
+        }
+        VaultEntry.Delete(data)
+        return redirect("/vault")
+    else:
+        return redirect("/")
 
 @app.route("/get_user_vault")
 def GetUserVault():

@@ -12,6 +12,13 @@ class VaultEntry():
         connectToMySQL(mysql_config["DB"]).query_db(query,data)
 
     @classmethod
+    def Delete(cls, data):
+        query = ("DELETE FROM vault "
+                 "WHERE id=%(entry_id)s "
+                 "AND user_id=%(user_id)s;")
+        connectToMySQL(mysql_config["DB"]).query_db(query,data)
+
+    @classmethod
     def GetUserVault(cls, data):
         query = ("SELECT id,entry,iv FROM vault "
                  "WHERE user_id=%(user_id)s;")
